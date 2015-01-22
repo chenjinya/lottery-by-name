@@ -1,0 +1,236 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+	<title>Picture Lottery</title>
+	
+	<!-- 新 Bootstrap 核心 CSS 文件 -->
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+	<style>
+		body {
+			font-family:"Microsoft Yahei";
+			background:url(background.jpg) no-repeat bottom center;
+		}
+		.lottery-section .lottery-title{ text-align:center; color:#fff; font-size:30px;}
+		.user-name{ color:#fff;}
+		.lottery-section .btn{ display:inline-block; }
+		.btn-wrapper{ text-align:center;}
+		.user-name{font-size:4em;height:2em;}
+		.winner-list {font-size:20px;}
+		.set-persion-num{ color:#fff;}
+		.set-persion-num input{ width:30px; text-align:center;color:#FFF;font-size:30px; border:0; outline:0; background:transparent;}
+	</style>
+
+</head>
+<body>
+
+	<div class="container lottery-section" class="clearfix">
+	
+	<div class="row">
+	<div class="col-md-4">
+			
+			
+		</div>
+		<div class="col-md-4">
+			<h2 class="lottery-title">抽奖环节 </h2>
+			
+		</div>
+		<div class="col-md-4 text-right">
+		<div class="set-persion-num">
+		抽取<input class="j-set-persion-num" style=" " onchange="javascript:GET_COUNT=this.value; console.log(this.value);"  />人
+			
+		</div>
+			
+		</div>
+		
+	</div>
+	<div class="row">
+		
+		<div class="col-md-12 btn-wrapper">
+			<h2 class="user-name"></h2>
+		</div>
+		
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+			
+		</div>
+		<div class="col-md-4 btn-wrapper">
+			<button class="btn btn-primary j-btn-stop btn-lg">停止</button>
+		<button class="btn btn-danger j-btn-start btn-lg">抽奖</button>
+		
+		</div>
+		<div class="col-md-4">
+			
+		</div>
+	</div>
+	<br />
+	<div class="row">
+		<div class="col-md-12 btn-wrapper">
+			<ul class="list-group winner-list j-winner-list">
+			</ul>
+			<button class="btn btn-default j-btn-clear ">清除记录</button>
+			
+		</div>
+		
+	</div>	 
+	</div>
+	<script type="text/javascript" src="./js/jquery-1.10.2.min.js"></script>
+	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+	<script src="./js/bootstrap.min.js"></script>
+	<script src="./js/conf.js"></script>
+    <script>
+	if(!nameList){
+		var nameList = [];
+		//此处为兼容处理
+		for(var ni  in nameListObj){
+			 nameList.push(  nameListObj[ni]["name"]);
+		}
+	}
+	//抽取人数
+	var GET_COUNT = 1;
+	$(".j-set-persion-num").val(GET_COUNT);
+	var resultIndex = 0;
+	function washCards(arr){
+		var tmp;
+		var j;
+		for( var i=0; i <arr.length; i++){
+			tmp = arr[i];
+			j=Math.floor(Math.random()*arr.length);
+			arr[i] = arr[j];
+			arr[j] = tmp;
+		}
+	}
+   $(document).ready(function(){
+		washCards(nameList);
+		$("body").height($(window).height());
+		$(".j-btn-stop").hide();
+		var userNameIndex=0;
+		var starting = false;
+		listWinners();
+		function listWinners(){
+			
+			if(localStorage.result){
+				var result= $.parseJSON(localStorage.result);
+				var $list = $(".j-winner-list");
+				var listHtml = '';
+				for(var k in result){
+					listHtml+='<li class="list-group-item text-center">';
+					for(var i =0; i<result[k].length; i++){
+						if( i!=0 && i %result[k].length == 0){
+							
+							listHtml+="【"+result[k][i]+"】";
+						}else{
+							listHtml+="【"+result[k][i]+"】";
+						}
+					}
+					listHtml+='</li>';
+				}
+				$list.html(listHtml);
+			}
+		}
+		function setCurrentWinners(list){
+			var monitorHtml = "";
+			for(var i =0; i<list.length; i++){
+					monitorHtml+=""+list[i]+" ";
+				}
+				$(".user-name").html(monitorHtml);
+		}
+		function turnName(){
+			var useNameWrapper = $(".user-name");
+			if(userNameIndex >= nameList.length){
+				userNameIndex = 0;
+				washCards(nameList);
+			}
+			useNameWrapper.html(nameList[userNameIndex])
+			setTimeout(function(){
+				if(starting == false){
+					return false;
+				}else{
+					userNameIndex++;
+					turnName();
+				}
+			},50);
+		};
+		function end(){
+			$(".j-btn-start").show();
+			$(".j-btn-stop").hide();
+			var users;
+			var result;
+			if(localStorage.users){
+				users= $.parseJSON(localStorage.users);
+			}else{
+				users = [];
+			}
+			if(localStorage.result){
+				result= $.parseJSON(localStorage.result);
+			}else{
+				result ={};
+			}
+			if(localStorage.resultIndex){
+				resultIndex=localStorage.resultIndex;
+				resultIndex ++;
+			}else{
+				resultIndex =0;
+			}
+			var currentList = [];
+			
+			result[resultIndex] = [];
+			for(var i =0; i<GET_COUNT ; i++){
+				if(! nameList[userNameIndex]){
+					userNameIndex = 0;
+				}
+				if(! nameList[userNameIndex]){
+					break;
+				}
+				currentList.push(nameList[userNameIndex]);
+				users.push(nameList[userNameIndex]);
+				result[resultIndex].push(nameList[userNameIndex])
+				userNameIndex++;
+			}
+			localStorage.users = JSON.stringify(users);
+			localStorage.result = JSON.stringify(result);
+			localStorage.resultIndex = resultIndex;
+			resultIndex++;
+			listWinners();
+			setCurrentWinners(currentList);
+			
+		}
+		$(".j-btn-start").on("click",function(){
+			starting = true;
+			
+			var users;
+			if(localStorage.users){
+				users= $.parseJSON(localStorage.users);
+			}else{
+				users = [];
+			}
+			for(var _i =0; _i<users.length; _i++){
+				var _index = nameList.indexOf(users[_i]);
+				if(_index>= 0 ){
+					nameList = nameList.slice(0,_index).concat(nameList.slice(_index+1));
+				}
+			}
+			washCards(nameList);
+			
+			$(".j-btn-start").hide();
+			$(".j-btn-stop").show();
+			turnName();
+			
+		});
+		$(".j-btn-stop").on("click",function(){
+			starting = false;
+			end();
+		});
+		$(".j-btn-clear").on("click",function(){
+			$(".j-winner-list").html("");
+			localStorage.users = "";
+			localStorage.result = "";
+			localStorage.resultIndex = 0;
+			
+		});
+   
+	});
+    </script>
+</body>
+</html>
