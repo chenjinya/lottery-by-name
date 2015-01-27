@@ -18,7 +18,9 @@
 		.user-name{font-size:4em;height:2em;}
 		.winner-list {font-size:20px;}
 		.set-persion-num{ color:#fff;}
-		.set-persion-num input{ width:30px; text-align:center;color:#FFF;font-size:30px; border:0; outline:0; background:transparent;}
+		.set-persion-num input{ width:50px; text-align:center;color:#FFF;font-size:30px; border:0; outline:0; background:transparent;}
+		
+		.static-bottom{ position:absolute; bottom:0;
 	</style>
 
 </head>
@@ -69,11 +71,13 @@
 		<div class="col-md-12 btn-wrapper">
 			<ul class="list-group winner-list j-winner-list">
 			</ul>
-			<button class="btn btn-default j-btn-clear ">清除记录</button>
 			
 		</div>
 		
 	</div>	 
+	<div class="row ">
+			<button class="btn btn-default j-btn-clear ">恢复出厂</button>
+	</div>	
 	</div>
 	<script type="text/javascript" src="./js/jquery-1.10.2.min.js"></script>
 	<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
@@ -82,12 +86,11 @@
     <script>
 	if(!nameList){
 		var nameList = [];
-		//此处为兼容处理
-		for(var ni  in nameListObj){
+		for(var ni in nameListObj ){
 			 nameList.push(  nameListObj[ni]["name"]);
 		}
 	}
-	//抽取人数
+	
 	var GET_COUNT = 1;
 	$(".j-set-persion-num").val(GET_COUNT);
 	var resultIndex = 0;
@@ -113,9 +116,15 @@
 			if(localStorage.result){
 				var result= $.parseJSON(localStorage.result);
 				var $list = $(".j-winner-list");
+				
 				var listHtml = '';
-				for(var k in result){
-					listHtml+='<li class="list-group-item text-center">';
+				var keyList =[];
+				var k;
+				for( k in result){
+					keyList.push(k);
+				}
+				for( k=keyList.length; k>0; k--){
+					listHtml+='<li class="list-group-item text-center"><span class="label label-danger">'+k+'</span>';
 					for(var i =0; i<result[k].length; i++){
 						if( i!=0 && i %result[k].length == 0){
 							
