@@ -208,7 +208,7 @@
 		}
 		$(".j-btn-start").on("click",function(){
 			starting = true;
-			
+			$(".user-name").html("");
 			var users;
 			if(localStorage.users){
 				users= $.parseJSON(localStorage.users);
