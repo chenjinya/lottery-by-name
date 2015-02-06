@@ -52,7 +52,9 @@
                     listHtml+='</li>';
                 }
                 $list.html(listHtml);
+                resizeWindow();
             }
+
         }
         function setCurrentWinners(list){
             var monitorHtml = "";
@@ -200,6 +202,7 @@
                 dh = wh;
             $("body").height(dh);
         }
+        resizeWindow();
         $(window).resize(function(){
             resizeWindow();
         });
