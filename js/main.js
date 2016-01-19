@@ -59,7 +59,7 @@
         function setCurrentWinners(list){
             var monitorHtml = "";
             for(var i =0; i<list.length; i++){
-                    monitorHtml+=""+list[i]+" ";
+                    monitorHtml+=" <span class='user-name-item' >"+list[i]+"</span> ";
                 }
                 $(".user-name").html(monitorHtml);
         }
@@ -72,7 +72,7 @@
             if(userNameShowIndex>= nameList.length - 3){
                 userNameShowIndex = 0;
             }
-            useNameWrapper.html(nameList[userNameShowIndex] +" "+ nameList[userNameShowIndex+1] +" "+ nameList[userNameShowIndex+2])
+            useNameWrapper.html("<span class='user-name-item' >" + nameList[userNameShowIndex] +" "+ nameList[userNameShowIndex+1] +" "+ nameList[userNameShowIndex+2]+"</span> ");
             setTimeout(function(){
                 if(starting == false){
                     return false;
@@ -189,7 +189,7 @@
             resultIndex = localStorage.resultIndex;
             if(localStorage.result){
                 var result=JSON.parse(localStorage.result);
-                result[resultIndex] .push( "作废" );
+                result[resultIndex] .push( "-无效-" );
                 localStorage.result = JSON.stringify(result);
             }
             listWinners();

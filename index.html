@@ -9,13 +9,19 @@
 	<style>
 		body {
 			font-family:"Microsoft Yahei";
-			background:url(background.jpg) no-repeat bottom center;
+			background:url(background.jpg) no-repeat top center;
+			background-size:100% 100%;
 		}
-		.lottery-section .lottery-title{ text-align:center; color:#fff; font-size:30px;}
+		.lottery-section .lottery-title{ text-align:center; color:#fff; font-size:60px;}
 		.user-name{ color:#fff;}
 		.lottery-section .btn{ display:inline-block; }
 		.btn-wrapper{ text-align:center;}
-		.user-name{font-size:4em; min-height:3em;}
+		.user-name{font-size:4em; min-height:3em; }
+
+		.user-name-item {
+			background: rgba(0,0,0,0.3);
+			padding:3px;
+		}
 		.user-name a { color:#FFF; cursor:pointer;}
 		.winner-list {font-size:20px;}
 		.set-persion-num{ color:#fff;}
@@ -61,7 +67,7 @@
 		<div class="col-md-4 btn-wrapper">
 			<button class="btn btn-primary j-btn-stop btn-lg">停止</button>
 		<button class="btn btn-danger j-btn-start btn-lg">抽奖</button>
-		<button class="btn btn-warning j-btn-trash btn-lg">作废</button>
+		<button class="btn btn-warning j-btn-trash btn-lg">无效</button>
 		
 		</div>
 		<div class="col-md-4">
